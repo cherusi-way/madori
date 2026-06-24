@@ -6,7 +6,7 @@
  * deploy gets a fresh cache and clients update on their next visit. If you edit this
  * file by hand outside the build, bump VERSION yourself to invalidate old caches.
  */
-const VERSION = '4d5209bfe11a';
+const VERSION = '090041996def';
 const CACHE = 'madori-' + VERSION;
 
 // App shell — the single-file app needs no network at runtime, so this is everything.

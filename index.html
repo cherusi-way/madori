@@ -408,6 +408,27 @@ input,select{font-family:inherit}
 .coach-card .cm-btns{display:flex; justify-content:flex-end; gap:8px}
 .coach-card .cm-btns button{height:36px; padding:0 16px; border-radius:18px; font-size:13.5px; font-weight:700; background:var(--line); color:var(--ink-2)}
 .coach-card .cm-btns button.ok{background:var(--ink); color:#fff}
+/* install banner */
+.install-bar{position:absolute; left:50%; transform:translateX(-50%) translateY(8px); bottom:calc(84px + var(--sa-b)); z-index:19;
+  display:none; align-items:center; gap:11px; width:max-content; max-width:calc(100% - 24px);
+  background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:9px 9px 9px 14px;
+  box-shadow:0 8px 26px rgba(40,50,46,.20); opacity:0; transition:opacity .22s, transform .22s}
+.install-bar.on{display:flex; opacity:1; transform:translateX(-50%) translateY(0)}
+.app.has-sel .install-bar{display:none}
+.install-bar .ib-ico{width:24px; height:24px; color:var(--ink); flex:0 0 auto}
+.install-bar .ib-txt{display:flex; flex-direction:column; line-height:1.25; min-width:0}
+.install-bar .ib-txt b{font-size:14px; font-weight:700; color:var(--ink)}
+.install-bar .ib-txt span{font-size:11.5px; color:var(--ink-3); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.install-bar .ib-go{flex:0 0 auto; height:36px; padding:0 16px; border-radius:18px; background:var(--ink); color:#fff; font-size:13.5px; font-weight:700}
+.install-bar .ib-x{flex:0 0 auto; width:32px; height:32px; border-radius:16px; display:flex; align-items:center; justify-content:center; color:var(--ink-3)}
+.install-bar .ib-x svg{width:16px; height:16px}
+/* iOS install steps */
+.ios-lead{margin:2px 2px 15px; font-size:14px; line-height:1.6; color:var(--ink-2)}
+.ios-steps{list-style:none; margin:0 0 14px; padding:0; display:flex; flex-direction:column; gap:12px}
+.ios-steps li{display:flex; align-items:flex-start; gap:11px; font-size:14px; line-height:1.5; color:var(--ink)}
+.ios-num{flex:0 0 auto; width:24px; height:24px; border-radius:50%; background:var(--ink); color:#fff; font-size:13px; font-weight:700; font-family:var(--mono); display:flex; align-items:center; justify-content:center; margin-top:1px}
+.ios-share{width:20px; height:20px; vertical-align:-4px; color:var(--accent)}
+.ios-note{margin:0 2px; font-size:12.5px; line-height:1.55; color:var(--ink-3)}
 /* calibration dialog */
 .cdlg-scrim{position:absolute; inset:0; background:rgba(30,38,34,.42); z-index:70; display:none}
 .cdlg-scrim.on{display:block}
@@ -477,6 +498,12 @@ input,select{font-family:inherit}
   </div>
 
   <button class="fit" id="bFit" aria-label="全体表示"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9V5a1 1 0 0 1 1-1h4M20 9V5a1 1 0 0 0-1-1h-4M4 15v4a1 1 0 0 0 1 1h4M20 15v4a1 1 0 0 1-1 1h-4"/></svg></button>
+  <div class="install-bar" id="installBanner">
+    <svg class="ib-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M12 7v6"/><path d="M9.5 10.5L12 13l2.5-2.5"/></svg>
+    <div class="ib-txt"><b>ホーム画面に追加</b><span id="ibSub">アプリのように全画面・オフラインで使えます</span></div>
+    <button class="ib-go" id="ibInstall">追加</button>
+    <button class="ib-x" id="ibClose" aria-label="閉じる"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  </div>
   <button class="fab" id="bAdd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>追加</button>
 
   <!-- action bar -->
@@ -540,6 +567,7 @@ input,select{font-family:inherit}
     <div class="grab"></div>
     <div class="sh-head"><h2>メニュー</h2></div>
     <div class="sh-body">
+      <div class="menu-item hidden" id="mInstall"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M12 7v6"/><path d="M9.5 10.5L12 13l2.5-2.5"/></svg>アプリをインストール</div>
       <div class="menu-item" id="mProjects"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>保存・プロジェクト<div class="right" id="autosaveTag"></div></div>
       <div class="menu-item" id="mWizard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 4.5 1.5c0 1.5-2 2-2 3.5"/><line x1="12" y1="17.5" x2="12" y2="17.51"/></svg>かんたん間取り診断（質問で作成）</div>
       <div class="menu-item" id="mTemplates"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>間取りパターンから作成</div>
@@ -591,6 +619,20 @@ input,select{font-family:inherit}
     <div class="grab"></div>
     <div class="sh-head"><h2>使い方</h2></div>
     <div class="sh-body" id="helpBody"></div>
+  </div>
+
+  <div class="sheet" id="iosInstallSheet">
+    <div class="grab"></div>
+    <div class="sh-head"><h2>ホーム画面に追加</h2></div>
+    <div class="sh-body">
+      <p class="ios-lead">Safari下部の<b>共有</b>ボタンから、このアプリをホーム画面に追加できます。追加するとアイコンから全画面・オフラインで使えます。</p>
+      <ol class="ios-steps">
+        <li><span class="ios-num">1</span><span>画面下の <svg class="ios-share" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="M8.5 6.5L12 3l3.5 3.5"/><path d="M7 11H5.5A1.5 1.5 0 0 0 4 12.5V20a1.5 1.5 0 0 0 1.5 1.5h13A1.5 1.5 0 0 0 20 20v-7.5A1.5 1.5 0 0 0 18.5 11H17"/></svg> <b>共有</b> をタップ</span></li>
+        <li><span class="ios-num">2</span><span>メニューを下にスクロールし <b>「ホーム画面に追加」</b> を選ぶ</span></li>
+        <li><span class="ios-num">3</span><span>右上の <b>「追加」</b> をタップして完了</span></li>
+      </ol>
+      <p class="ios-note">※ Chrome など他のブラウザではうまくいかないことがあります。<b>Safari</b> で開いてからお試しください。</p>
+    </div>
   </div>
 
   <div class="cdlg-scrim" id="cdlgScrim"></div>
@@ -1951,6 +1993,36 @@ function showCoach(i){
 function endCoach(){ const c=document.getElementById('coach'); if(c) c.classList.remove('on'); try{ Store.set(K_ONBOARD,'1'); }catch(e){} }
 function dismissCoach(){ const c=document.getElementById('coach'); if(c && c.classList.contains('on')) endCoach(); }
 function maybeOnboard(){ try{ if(!Store.ok || Store.get(K_ONBOARD)) return; }catch(e){ return; } setTimeout(()=>showCoach(0), 650); }
+/* ---- install to home screen (PWA) ---- */
+let deferredInstall=null;
+function isStandalonePWA(){ try{ return (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone===true; }catch(e){ return false; } }
+function isIOSDevice(){ try{ return /iphone|ipad|ipod/i.test(navigator.userAgent||'') && !window.MSStream; }catch(e){ return false; } }
+function canInstall(){ return !isStandalonePWA() && (!!deferredInstall || isIOSDevice()); }
+function refreshInstallUI(){
+  const show=canInstall();
+  const mi=document.getElementById('mInstall'); if(mi) mi.classList.toggle('hidden', !show);
+  const sub=document.getElementById('ibSub'); if(sub) sub.textContent = (isIOSDevice() && !deferredInstall) ? '共有メニューから追加できます' : 'アプリのように全画面・オフラインで使えます';
+  const banner=document.getElementById('installBanner');
+  if(banner){ let dismissed=false; try{ dismissed = Store.ok && !!Store.get(K_INSTALL); }catch(e){} banner.classList.toggle('on', show && !dismissed); }
+}
+function doInstall(){
+  if(deferredInstall){
+    const dp=deferredInstall; deferredInstall=null;
+    const b=document.getElementById('installBanner'); if(b) b.classList.remove('on');
+    try{ dp.prompt(); if(dp.userChoice && dp.userChoice.then) dp.userChoice.then(()=>{}).catch(()=>{}); }catch(e){}
+    setTimeout(refreshInstallUI,300);
+  } else if(isIOSDevice()){
+    openSheet('iosInstallSheet');
+  }
+}
+function dismissInstall(){ try{ Store.set(K_INSTALL,'1'); }catch(e){} const b=document.getElementById('installBanner'); if(b) b.classList.remove('on'); }
+function initInstallUI(){
+  try{
+    window.addEventListener('beforeinstallprompt', e=>{ try{ e.preventDefault(); }catch(_){} deferredInstall=e; refreshInstallUI(); });
+    window.addEventListener('appinstalled', ()=>{ deferredInstall=null; try{ Store.set(K_INSTALL,'1'); }catch(_){} const b=document.getElementById('installBanner'); if(b) b.classList.remove('on'); const mi=document.getElementById('mInstall'); if(mi) mi.classList.add('hidden'); try{ toast('インストールしました'); }catch(_){} });
+  }catch(e){}
+  refreshInstallUI();
+}
 /* calibration gesture */
 function drawCalib(){ const L=document.getElementById('calibLine'), c1=document.getElementById('calibC1'), c2=document.getElementById('calibC2');
   L.setAttribute('x1',calib.x1); L.setAttribute('y1',calib.y1); L.setAttribute('x2',calib.x2); L.setAttribute('y2',calib.y2);
@@ -2479,7 +2551,7 @@ const Store=(()=>{ let ok=true; try{ const k='__m_t__'; localStorage.setItem(k,'
   return { ok, get(k){ if(!ok) return null; try{ return localStorage.getItem(k); }catch(e){ return null; } },
     set(k,v){ if(!ok) return false; try{ localStorage.setItem(k,v); return true; }catch(e){ return false; } },
     del(k){ if(!ok) return; try{ localStorage.removeItem(k); }catch(e){} } }; })();
-const K_AUTO='madori:autosave', K_LIST='madori:projlist', K_ONBOARD='madori:onboarded';
+const K_AUTO='madori:autosave', K_LIST='madori:projlist', K_ONBOARD='madori:onboarded', K_INSTALL='madori:installDismissed';
 
 function serializeProject(includeUnderlaySrc){
   syncActiveFloor();
@@ -2583,6 +2655,9 @@ document.getElementById('bAdd').addEventListener('click',()=>{ if(state.selMode)
 document.getElementById('bFit').addEventListener('click',fit);
 document.getElementById('bMenu').addEventListener('click',()=>{ syncMenuSegs(); openSheet('menuSheet'); });
 document.getElementById('bHelp').addEventListener('click',openHelp);
+document.getElementById('ibInstall').addEventListener('click',doInstall);
+document.getElementById('ibClose').addEventListener('click',dismissInstall);
+document.getElementById('mInstall').addEventListener('click',()=>{ closeSheets(); doInstall(); });
 scrim.addEventListener('click',closeSheets);
 document.querySelectorAll('.sheet .grab').forEach(g=>g.addEventListener('click',closeSheets));
 
@@ -2650,6 +2725,7 @@ window.addEventListener('resize',()=>{ if(rafId)cancelAnimationFrame(rafId); raf
 applyGrid(); updHist(); refreshEmpty(); updateLockchip(); renderFloorStrip();
 let restored=false;
 try{ restored=restoreAutosave(); }catch(e){ restored=false; }
+initInstallUI();
 requestAnimationFrame(()=>{ fit(); if(restored) toast('前回の続きから復元しました'); maybeOnboard(); });
 })();
 </script>
